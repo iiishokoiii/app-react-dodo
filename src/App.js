@@ -1,5 +1,6 @@
 import './App.css';
-import React from 'react'
+import React, { useState } from 'react'
+
 
 function Header() {
   return (
@@ -10,8 +11,42 @@ function Header() {
   );
 }
 
-function List() {
-  const list = [
+function List({ list }) {
+  console.log(list)
+  return (
+    <ul className="list">
+      {list.map((item, i) => (
+        <li
+          className={item.checked ? "checked" : ""}
+          key={i}
+        >{item.title}</li>
+      ))}
+    </ul>
+  )
+}
+
+function Form({addItem}) {
+  const [tmpText, changeTmpText] = useState('hoge')
+  return (
+    <div className="form">
+      <label htmlFor="text">追加</label>
+      <input
+        type="text"
+        id="text"
+        defaultValue={tmpText}
+        onChange={e => { changeTmpText(e.currentTarget.value) }}
+      />
+      <input
+        type="button"
+        value="追加"
+        onClick={()=>addItem(tmpText)}
+      />
+    </div>
+  );
+}
+
+function App() {
+  const [list, changeList]  = useState([
     {
       title:"Reactのインストール",
       checked:true
@@ -28,35 +63,25 @@ function List() {
       title:"演習",
       checked:false
     }
-  ]
-  return (
-    <ul className="list">
-      {list.map((item, i) => (
-        <li
-          className={item.checked ? "checked" : ""}
-          key={i}
-        >{item.title}</li>
-      ))}
-    </ul>
-  )
-}
+  ])
 
-function Form() {
-  return (
-    <div className="form">
-      <label htmlFor="text">追加</label>
-      <input type="text" id="text" defaultValue="ダミー" />
-      <input type="button" value="追加" />
-    </div>
-  );
-}
+  const addItem = (title) => {
+    const newItem = {
+      title: title,
+      checked: false
+    }
+    changeList([...list, newItem])
+  }
 
-function App() {
   return (
     <>
       <Header/>
-      <List/>
-      <Form/>
+      <List
+        list={list}
+        />
+      <Form
+        addItem={addItem}
+      />
     </>
   );
 }
