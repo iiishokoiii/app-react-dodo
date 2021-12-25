@@ -12,7 +12,6 @@ function Header() {
 }
 
 function List({ list }) {
-  console.log(list)
   return (
     <ul className="list">
       {list.map((item, i) => (
@@ -26,23 +25,35 @@ function List({ list }) {
 }
 
 function Form({addItem}) {
-  const [tmpText, changeTmpText] = useState('hoge')
+  const [tmpText, changeTmpText] = useState('') // 子コンポーネント内でのみ使用
+  const [errorText, changeErrorText] = useState('')
+  const handleAddItem = () => {
+    if (!tmpText) {
+      changeErrorText('テキストが入力されていません')
+      return
+    }
+    addItem(tmpText)　//親コンポーネントで定義した関数、propsで渡しているので使用できる
+    changeErrorText('')
+    changeTmpText('')
+  }
+
   return (
     <div className="form">
       <label htmlFor="text">追加</label>
       <input
         type="text"
         id="text"
-        defaultValue={tmpText}
+        value={tmpText}
         onChange={e => { changeTmpText(e.currentTarget.value) }}
       />
       <input
         type="button"
         value="追加"
-        onClick={()=>addItem(tmpText)}
+        onClick={handleAddItem}
       />
+      { errorText ? <p>{errorText}</p> : <></>}
     </div>
-  );
+  )
 }
 
 function App() {
@@ -83,7 +94,7 @@ function App() {
         addItem={addItem}
       />
     </>
-  );
+  )
 }
 
 export default App;
