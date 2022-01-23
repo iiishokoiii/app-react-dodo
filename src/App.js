@@ -34,13 +34,23 @@ function App() {
     }
   ])
 
+  //指定したtitleのアイテムを追加する
+  const addListItem = (title) => {
+    const newItem = {
+      title: title,
+      checked: false,
+      isEditing: false
+    }
+    changeList([...list, newItem])
+  }
+
   return (
     <BrowserRouter>
       <Header />
       <Routes>
         <Route path="/" element={<ListPage list={list} />} />
-        <Route path="/add" element={<AddPage />} />
-        <Route path="/sample" element={<SampleApp />} />
+        <Route path="/add" element={<AddPage  addListItem={addListItem} />} />
+        <Route path="/sample" element={<SampleApp/>} />
       </Routes>
     </BrowserRouter>
   )
