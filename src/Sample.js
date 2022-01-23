@@ -2,14 +2,6 @@ import './App.css';
 import React, { useState, Fragment } from 'react'
 
 
-function Header() {
-  return (
-    <>
-      <h1 className="header">ToDo App</h1>
-      <p>TODOが追加できるよ</p>
-    </>
-  );
-}
 
 // list の内容を表示する
 // アイテムの isEditing が true の場合は編集モードで表示する
@@ -102,7 +94,7 @@ function Editor({editItem, finishEditing, itemTitle, index}) {
   )
 }
 
-function App() {
+function SampleApp() {
   const [list, changeList]  = useState([
     {
       title:"Reactのインストール",
@@ -174,7 +166,6 @@ function App() {
 
   return (
     <>
-      <Header/>
       <List
         list={list}
         editItem={editItem}
@@ -188,4 +179,4 @@ function App() {
   )
 }
 
-export default App;
+export default SampleApp;

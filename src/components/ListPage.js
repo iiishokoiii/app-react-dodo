@@ -11,7 +11,8 @@ export default function ListPage({list}) {
         >{item.title}</li>
       ))}
       </ul>
-      <Link to="/add">Add Item</Link> 
+      <p><Link to="/add">Add Item</Link> </p>
+      <p><Link to="/sample">Sample</Link></p>
   </>
   )
 }

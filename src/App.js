@@ -8,6 +8,7 @@ import {
 import ListPage from "./components/ListPage";
 import AddPage from "./components/AddPage";
 import Header from "./components/Header";
+import SampleApp from "./Sample";
 
 function App() {
   const [list, changeList]  = useState([
@@ -39,6 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ListPage list={list} />} />
         <Route path="/add" element={<AddPage />} />
+        <Route path="/sample" element={<SampleApp />} />
       </Routes>
     </BrowserRouter>
   )
