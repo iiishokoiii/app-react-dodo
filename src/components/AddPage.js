@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react'
 
 export default function AdddPage({addListItem}) {
   const [tmpText, changeTmpText] = useState('') // 子コンポーネント内でのみ使用
   const [errorText, changeErrorText] = useState('')
+  const navigate = useNavigate()
   const handleAddItem = () => {
     if (!tmpText) {
       changeErrorText('テキストが入力されていません')
@@ -12,6 +13,7 @@ export default function AdddPage({addListItem}) {
     addListItem(tmpText)　//親コンポーネントで定義した関数、propsで渡しているので使用できる
     changeErrorText('')
     changeTmpText('')
+    navigate("/")
   }
   return (
     <div className="form">
@@ -28,8 +30,6 @@ export default function AdddPage({addListItem}) {
         onClick={handleAddItem}
       />
       {errorText ? <p>{errorText}</p> : <></>}
-      <br />
-      <Link to="/">list</Link>
     </div>
   )
 }
