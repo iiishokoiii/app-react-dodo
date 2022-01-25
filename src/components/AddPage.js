@@ -1,11 +1,12 @@
+import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import React, { useState } from 'react'
 
 export default function AdddPage({addListItem}) {
   const [tmpText, changeTmpText] = useState('') // 子コンポーネント内でのみ使用
   const [errorText, changeErrorText] = useState('')
   const navigate = useNavigate()
-  const handleAddItem = () => {
+
+  const handleAdd = () => {
     if (!tmpText) {
       changeErrorText('テキストが入力されていません')
       return
@@ -27,7 +28,7 @@ export default function AdddPage({addListItem}) {
       <input
         type="button"
         value="追加"
-        onClick={handleAddItem}
+        onClick={handleAdd}
       />
       {errorText ? <p>{errorText}</p> : <></>}
     </div>

@@ -8,11 +8,12 @@ export default function ListPage({list}) {
         <li
           className={item.checked ? "checked" : ""}
           key={i}
-        >{item.title}<Link to={`/delete/${i}`}>Delete</Link></li>
+        >{item.title} <Link to={`/delete/${i}`}>Delete</Link> <Link to={`/edit/${i}`}>Edit</Link>
+        </li>
       ))}
-      </ul>
-      <p><Link to="/add">Add Item</Link> </p>
-      <p><Link to="/sample">Sample</Link></p>
+    </ul>
+    <p><Link to="/add">Add Item</Link> </p>
+    <p><Link to="/sample">Sample</Link></p>
   </>
   )
 }

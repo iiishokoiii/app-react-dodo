@@ -8,6 +8,7 @@ import {
 import ListPage from "./components/ListPage";
 import AddPage from "./components/AddPage";
 import DeletePage from "./components/DeletePage";
+import EditPage from "./components/EditPage";
 import Header from "./components/Header";
 import SampleApp from "./Sample";
 
@@ -45,8 +46,18 @@ function App() {
     changeList([...list, newItem])
   }
 
-  const deleteListItem = (deleteInddx) => {
-    const newList = list.filter((item, idx) => idx !== deleteInddx)
+  //指定したインデックスのアイテムを削除する
+  const deleteListItem = (deleteIndex) => {
+    const newList = list.filter((item, idx) => idx !== deleteIndex)
+    changeList(newList)
+  }
+
+  //インデックスで指定したアイテムの title の値を変更する
+  const editListItem = (editIndex, editText) => {
+    const newList = list.map((item, idx) => {
+      if (idx !== editIndex) return item
+      return { ...item, title: editText }
+    })
     changeList(newList)
   }
 
@@ -57,6 +68,7 @@ function App() {
         <Route path="/" element={<ListPage list={list} />} />
         <Route path="/add" element={<AddPage  addListItem={addListItem} />} />
         <Route path="/delete/:id" element={<DeletePage list={list} deleteListItem={deleteListItem} />} />
+        <Route path="/edit/:id" element={<EditPage list={list} editListItem={editListItem} />} />
         <Route path="/sample" element={<SampleApp/>} />
       </Routes>
     </BrowserRouter>

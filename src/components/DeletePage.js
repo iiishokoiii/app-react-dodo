@@ -5,6 +5,7 @@ export default function DeletePage({list, deleteListItem}) {
   const params = useParams()
   const deleteIndex = Number(params.id)
   const deleteItem = list.find((item, idx) => idx === deleteIndex)
+  
   const handleDelete = () => {
     deleteListItem(deleteIndex)
     navigate('/')
