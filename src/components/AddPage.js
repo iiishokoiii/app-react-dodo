@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import axios from 'axios'
+import { PATH } from '../config'
 
-export default function AdddPage({addListItem}) {
+export default function AdddPage() {
   const [tmpText, changeTmpText] = useState('') // 子コンポーネント内でのみ使用
   const [errorText, changeErrorText] = useState('')
   const navigate = useNavigate()
@@ -11,10 +13,14 @@ export default function AdddPage({addListItem}) {
       changeErrorText('テキストが入力されていません')
       return
     }
-    addListItem(tmpText)　//親コンポーネントで定義した関数、propsで渡しているので使用できる
-    changeErrorText('')
-    changeTmpText('')
-    navigate("/")
+    // addListItem(tmpText)　//親コンポーネントで定義した関数、propsで渡しているので使用できる
+
+    axios.post(PATH + 'todos', {
+      title: tmpText,
+      checked: false
+    }).then(() => {
+      navigate("/")
+    })
   }
   return (
     <div className="form">
@@ -29,6 +35,11 @@ export default function AdddPage({addListItem}) {
         type="button"
         value="追加"
         onClick={handleAdd}
+      />
+      <input
+        type="button"
+        value="キャンセル"
+        onClick={() => { navigate('/') }}
       />
       {errorText ? <p>{errorText}</p> : <></>}
     </div>
