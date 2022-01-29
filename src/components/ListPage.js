@@ -4,7 +4,7 @@ import axios from 'axios'
 import { PATH } from '../config'
 
 export default function ListPage() {
-  
+
   const [todoList, changeTodoList] = useState([])
 
   // 初回レンダリング時にAjaxでデータ取得し、todoListに代入する
@@ -21,10 +21,10 @@ export default function ListPage() {
         <li
           className={item.checked ? "checked" : ""}
           key={i}
-        >{item.title} <Link to={`/delete/${i}`}>Delete</Link> <Link to={`/edit/${i}`}>Edit</Link>
+        >{item.title} <Link to={`/delete/${item.id}`}>Delete</Link> <Link to={`/edit/${item.id}`}>Edit</Link>
         </li>
       ))}
-    </ul>
+      </ul>
     <p><Link to="/add">Add Item</Link> </p>
     <p><Link to="/sample">Sample</Link></p>
   </>
