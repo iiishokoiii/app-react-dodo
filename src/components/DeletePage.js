@@ -6,18 +6,18 @@ import { PATH } from '../config'
 export default function DeletePage() {
   const navigate = useNavigate()
   const params = useParams()
-  const deleteIndex = Number(params.id)
+  const deleteId = Number(params.id)
   const [todoItem, changeTodoItem] = useState([])
 
   // 初回レンダリング時にAjaxで、対象のアイテムのデータを取得する
   useEffect(()=>{
-    axios.get(PATH + 'todo/' + deleteIndex).then(res => {
+    axios.get(PATH + 'todo/' + deleteId).then(res => {
       changeTodoItem(res.data);
     })
     },[])
 
   const handleDelete = () => {
-    axios.delete(PATH + 'todo/' + deleteIndex).then(() => {
+    axios.delete(PATH + 'todo/' + deleteId).then(() => {
       navigate('/')
     })
   }
