@@ -14,6 +14,17 @@ export default function ListPage() {
     })
   }, [])
 
+  const handleChangeStatus = (changeId) => {
+    const todoItem = todoList.find((item, idx) => item.id === changeId)
+    const newTodoItem = {
+      ...todoItem,
+      checked: true
+    }
+    axios.put(PATH + 'todo/' + changeId, newTodoItem).then(() => {
+      window.location.reload()
+    })
+  }
+
   return (
   <>
     <ul className="list">
@@ -21,7 +32,11 @@ export default function ListPage() {
         <li
           className={item.checked ? "checked" : ""}
           key={i}
-        >{item.title} <Link to={`/delete/${item.id}`}>Delete</Link> <Link to={`/edit/${item.id}`}>Edit</Link>
+        ><input
+            type="button"
+            value="done"
+            onClick={() => handleChangeStatus(item.id)}
+        />{item.title} <Link to={`/delete/${item.id}`}>Delete</Link> <Link to={`/edit/${item.id}`}>Edit</Link>
         </li>
       ))}
       </ul>
