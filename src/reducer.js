@@ -1,5 +1,6 @@
 const initialState = {
   isFetchTodoList: false,
+  isAdding: false,
   todoList: [{
     title: 'hoge'
   }],
@@ -38,7 +39,22 @@ export default function reducer(state = initialState, action) {
       return {
         todoList: newTodoList,
       };
-    } 
+    }
+      
+    case "ADD_TODO": {
+      return {
+        ...state,
+        isAdding: true,
+      };
+    }
+      
+    case "SUCCESS_ADD_TODO": {
+      return {
+        ...state,
+        isAdding: true,
+      }
+    }
+      
     default:
     return state;
   }

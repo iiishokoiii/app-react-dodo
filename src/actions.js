@@ -9,3 +9,9 @@ export const toggleTodoAction = (payload) => ({
   type: "TOGGLE_TODO",
   payload,
 });
+export const addTodoAction = () => ({
+  type: "ADD_TODO",
+});
+export const successAddTodoAction = () => ({
+  type: "SUCCESS_ADD_TODO",
+}); 
