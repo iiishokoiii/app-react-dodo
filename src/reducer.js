@@ -1,4 +1,5 @@
 const initialState = {
+  isFetchTodoList: false,
   todoList: [{
     title: 'hoge'
   }],
@@ -6,11 +7,20 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case "SET_TODO_LIST": {
+    case "FETCH_TODO_LIST": {
       return {
-        todoList: action.payload,
+        ...state,
+        isFetchTodoList: true,
       };
     }
+      
+    case "SUCCESS_FETCH_TODO_LIST": {
+      return {
+        ...state,
+        isFetchTodoList: false,
+        todoList: action.payload,
+      };
+    } 
       
     case "TOGGLE_TODO": {
       console.log('hoge')
@@ -28,8 +38,7 @@ export default function reducer(state = initialState, action) {
       return {
         todoList: newTodoList,
       };
-    }
-      
+    } 
     default:
     return state;
   }

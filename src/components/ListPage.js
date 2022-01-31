@@ -7,14 +7,18 @@ import { useSelector, useDispatch } from "react-redux"
 export default function ListPage() {
 
   const todoList = useSelector((state) => state.todoList) //グローバルstateを取得する
+  const isFetchTodoList = useSelector((state) => state.isFetchTodoList)
   const dispatch = useDispatch()
 
   // 初回レンダリング時にAjaxでデータ取得し、グローバルstateのtodoListに代入する
   useEffect(() => {
+    dispatch({
+      type: "FETCH_TODO_LIST"
+    })
     axios.get(PATH + 'todos').then(res => {
       //reducer.js の設定にもとづきグローバルstateの値を更新する
       dispatch({
-        type: "SET_TODO_LIST",
+        type: "SUCCESS_FETCH_TODO_LIST",
         payload: res.data,
       });
     })
@@ -33,6 +37,10 @@ export default function ListPage() {
       });
     });
   }
+
+  if (isFetchTodoList) {
+    return <p>loading...</p>;
+  } 
 
   return (
   <>
