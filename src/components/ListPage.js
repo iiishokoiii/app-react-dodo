@@ -20,15 +20,18 @@ export default function ListPage() {
     })
   }, [])
 
-  const handleChangeStatus = (changeId) => {
-    const todoItem = todoList.find((item, idx) => item.id === changeId)
-    const newTodoItem = {
-      ...todoItem,
-      checked: true
+  const handleToggle = (item) => {
+    const newItem = {
+      ...item,
+      checked: !item.checked,
     }
-    axios.put(PATH + 'todo/' + changeId, newTodoItem).then(() => {
-      window.location.reload()
-    })
+    axios.put(PATH + "todo/" + item.id, newItem)
+    .then((res) => {
+      dispatch({
+        type: "TOGGLE_TODO",
+        payload: item.id,
+      });
+    });
   }
 
   return (
@@ -41,7 +44,7 @@ export default function ListPage() {
         ><input
             type="button"
             value="done"
-            onClick={() => handleChangeStatus(item.id)}
+            onClick={() => handleToggle(item)}
         />{item.title} <Link to={`/delete/${item.id}`}>Delete</Link> <Link to={`/edit/${item.id}`}>Edit</Link>
         </li>
       ))}
