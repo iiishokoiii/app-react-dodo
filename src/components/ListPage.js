@@ -3,6 +3,11 @@ import { Link } from "react-router-dom"
 import axios from 'axios'
 import { PATH } from '../config'
 import { useSelector, useDispatch } from "react-redux"
+import {
+  fetchTodoListAction,
+  successFetchTodoListAction,
+  toggleTodoAction,
+ } from "../actions"
 
 export default function ListPage() {
 
@@ -12,15 +17,10 @@ export default function ListPage() {
 
   // 初回レンダリング時にAjaxでデータ取得し、グローバルstateのtodoListに代入する
   useEffect(() => {
-    dispatch({
-      type: "FETCH_TODO_LIST"
-    })
+    dispatch(fetchTodoListAction())
     axios.get(PATH + 'todos').then(res => {
       //reducer.js の設定にもとづきグローバルstateの値を更新する
-      dispatch({
-        type: "SUCCESS_FETCH_TODO_LIST",
-        payload: res.data,
-      });
+      dispatch(successFetchTodoListAction(res.data));
     })
   }, [])
 
@@ -31,10 +31,7 @@ export default function ListPage() {
     }
     axios.put(PATH + "todo/" + item.id, newItem)
     .then((res) => {
-      dispatch({
-        type: "TOGGLE_TODO",
-        payload: item.id,
-      });
+      dispatch(toggleTodoAction(item.id));
     });
   }
 
