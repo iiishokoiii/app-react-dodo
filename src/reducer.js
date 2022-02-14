@@ -4,6 +4,9 @@ const initialState = {
   todoList: [{
     title: 'hoge'
   }],
+  isDeleting: false,
+  isFetchTodo: false,
+  todo: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -52,6 +55,36 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isAdding: true,
+      }
+    }
+      
+    case "FETCH_TODO": {
+      return {
+        ...state,
+        isFetchTodo: true,
+      };
+    }
+      
+    case "SUCCESS_FETCH_TODO": {
+      return {
+        ...state,
+        isFetchTodo: false,
+        todo: action.payload
+      }
+    }
+
+    case "DELETE_TODO": {
+      return {
+        ...state,
+        isDeleting: true,
+      };
+    }
+      
+    case "SUCCESS_DELETE_TODO": {
+      return {
+        ...state,
+        isDeleting: false,
+        todo: null
       }
     }
       

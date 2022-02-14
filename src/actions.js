@@ -14,4 +14,17 @@ export const addTodoAction = () => ({
 });
 export const successAddTodoAction = () => ({
   type: "SUCCESS_ADD_TODO",
+});
+export const fetchTodoAction = () => ({
+  type: "FETCH_TODO",
+});
+export const successFetchTodoAction = (payload) => ({
+  type: "SUCCESS_FETCH_TODO",
+  payload,
+});
+export const deleteTodoAction = () => ({
+  type: "DELETE_TODO",
+});
+export const successDeleteTodoAction = () => ({
+  type: "SUCCESS_DELETE_TODO",
 }); 

@@ -2,8 +2,18 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom"
 import axios from 'axios'
 import { PATH } from '../config'
+import { useSelector, useDispatch } from "react-redux"
+import {
+  fetchTodoAction,
+  successFetchTodoAction,
+  deleteTodoAction,
+  successDeleteTodoAction
+} from "../actions"
 
 export default function DeletePage() {
+
+  const isAdding = useSelector((state) => state.isAdding)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const params = useParams()
   const deleteId = Number(params.id)
