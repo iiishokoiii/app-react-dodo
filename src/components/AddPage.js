@@ -1,13 +1,20 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useTodo from "../hooks/useTodo";
 
 export default function AddPage() {
   const { isAdding, addTodo } = useTodo();
   const [tmpText, changeTmpText] = useState("");
+  const navigate = useNavigate();
 
-  const handleAddList = () => {
+  const handleAddList = async () => {
     if (!tmpText) return;
-    addTodo(tmpText);
+    try {
+      await addTodo(tmpText);
+      navigate("/");
+    } catch (e) {
+      //失敗した処理
+    }
   };
 
   return (

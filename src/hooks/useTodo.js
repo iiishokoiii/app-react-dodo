@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { PATH } from "../config";
 
 import {
@@ -16,7 +15,6 @@ function useTodo() {
   const isFetchTodoList = useSelector((state) => state.isFetchTodoList);
   const isAdding = useSelector((state) => state.isAdding);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const fetchTodoList = () => {
     dispatch(fetchTodoListAction());
@@ -39,14 +37,13 @@ function useTodo() {
 
   const addTodo = (tmpText) => {
     dispatch(addTodoAction());
-    axios
+    return axios
     .post(PATH + "todo", {
       title: tmpText,
       checked: false,
     })
     .then(() => {
       dispatch(successAddTodoAction());
-      navigate("/");
     });
   }
   
