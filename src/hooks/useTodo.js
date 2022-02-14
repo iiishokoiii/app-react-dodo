@@ -7,13 +7,19 @@ import {
   successFetchTodoListAction,
   toggleTodoAction,
   addTodoAction,
-  successAddTodoAction
+  successAddTodoAction,
+  fetchTodoAction,
+  successFetchTodoAction,
+  deleteTodoAction,
+  successDeleteTodoAction,
 } from "../actions";
 
 function useTodo() {
   const todoList = useSelector((state) => state.todoList);
+  const todo = useSelector((state) => state.todo);
   const isFetchTodoList = useSelector((state) => state.isFetchTodoList);
   const isAdding = useSelector((state) => state.isAdding);
+  const isDeleting = useSelector((state) => state.isDeleting);
   const dispatch = useDispatch();
 
   const fetchTodoList = () => {
@@ -46,14 +52,33 @@ function useTodo() {
       dispatch(successAddTodoAction());
     });
   }
+
+  const fetchTodo = (id) => {
+    dispatch(fetchTodoAction());
+    axios.get(PATH + "todo/" + id).then((res) => {
+      dispatch(successFetchTodoAction(res.data));
+    });
+  }
+
+  const deleteTodo = (id) => {
+    dispatch(deleteTodoAction());
+    axios.delete(PATH + "todo/" + id).then(() => {
+      dispatch(successDeleteTodoAction());
+      
+    });
+  }
   
   return {
     todoList,
+    todo,
     isFetchTodoList,
     isAdding,
+    isDeleting,
     fetchTodoList,
     toggleTodo,
-    addTodo
+    addTodo,
+    fetchTodo,
+    deleteTodo
   };
 }
 

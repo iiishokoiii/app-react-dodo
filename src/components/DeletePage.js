@@ -1,36 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { PATH } from "../config";
-
-import {
-  fetchTodoAction,
-  successFetchTodoAction,
-  deleteTodoAction,
-  successDeleteTodoAction,
-} from "../actions";
+import useTodo from "../hooks/useTodo";
 
 export default function DeletePage() {
-  const todo = useSelector((state) => state.todo);
-  const isDeleting = useSelector((state) => state.isDeleting);
-  const dispatch = useDispatch();
+  const { todo, isDeleting, fetchTodo, deleteTodo } = useTodo();
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchTodoAction());
-    axios.get(PATH + "todo/" + params.id).then((res) => {
-      dispatch(successFetchTodoAction(res.data));
-    });
+    fetchTodo(params.id);
   }, []);
 
-  const handleDelete = () => {
-    dispatch(deleteTodoAction());
-    axios.delete(PATH + "todo/" + params.id).then(() => {
-      dispatch(successDeleteTodoAction());
-      navigate("/");
-    });
+  const handleDelete = async () => {
+    await deleteTodo(params.id);
+    navigate("/");
   };
 
   if (!todo) {
