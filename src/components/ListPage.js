@@ -1,39 +1,18 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { PATH } from "../config";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import {
-  fetchTodoListAction,
-  successFetchTodoListAction,
-  toggleTodoAction,
-} from "../actions";
+import useTodo from "../hooks/useTodo";
 
 export default function ListPage() {
-  const todoList = useSelector((state) => state.todoList);
-  const isFetchTodoList = useSelector((state) => state.isFetchTodoList);
-  const dispatch = useDispatch();
+  const { todoList, isFetchTodoList, fetchTodoList, toggleTodo } = useTodo(); 
 
   useEffect(() => {
-    dispatch(fetchTodoListAction());
-    axios.get(PATH + "todos").then((res) => {
-      dispatch(successFetchTodoListAction(res.data));
-    });
+    fetchTodoList()
   }, []);
 
-  const handleEdit = (item) => () => {
-    axios
-      .put(PATH + "todo/" + item.id, {
-        ...item,
-        checked: !item.checked,
-      })
-      .then((res) => {
-        //変更点だけ反映
-        dispatch(toggleTodoAction(item.id));
-      });
+  const handleEdit = (todo) => () => {
+    toggleTodo(todo)
   };
+
   if (isFetchTodoList) {
     return <p>loading...</p>;
   }
