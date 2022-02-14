@@ -1,17 +1,22 @@
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { PATH } from "../config";
 
 import {
   fetchTodoListAction,
   successFetchTodoListAction,
   toggleTodoAction,
+  addTodoAction,
+  successAddTodoAction
 } from "../actions";
 
 function useTodo() {
   const todoList = useSelector((state) => state.todoList);
   const isFetchTodoList = useSelector((state) => state.isFetchTodoList);
+  const isAdding = useSelector((state) => state.isAdding);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchTodoList = () => {
     dispatch(fetchTodoListAction());
@@ -31,12 +36,27 @@ function useTodo() {
       dispatch(toggleTodoAction(item.id));
     });
   };
+
+  const addTodo = (tmpText) => {
+    dispatch(addTodoAction());
+    axios
+    .post(PATH + "todo", {
+      title: tmpText,
+      checked: false,
+    })
+    .then(() => {
+      dispatch(successAddTodoAction());
+      navigate("/");
+    });
+  }
   
   return {
     todoList,
     isFetchTodoList,
+    isAdding,
     fetchTodoList,
-    toggleTodo
+    toggleTodo,
+    addTodo
   };
 }
 
