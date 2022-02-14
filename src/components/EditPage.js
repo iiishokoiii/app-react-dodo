@@ -1,33 +1,47 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from "react-router-dom"
-import axios from 'axios'
-import { PATH } from '../config'
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { PATH } from "../config";
+
+import {
+  fetchTodoAction,
+  successFetchTodoAction,
+  editTodoAction,
+  successEditTodoAction,
+} from "../actions";
 
 export default function EditPage() {
-  const navigate = useNavigate()
-  const params = useParams()
-  const editId = Number(params.id)
-  const [todoItem, changeTodoItem] = useState(null)
-  const [tmpText, changeTmpText] = useState('') //子コンポーネント内でのみ使用
+  const todo = useSelector((state) => state.todo);
+  const isEditing = useSelector((state) => state.isEditing);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [tmpText, changeTmpText] = useState("");
 
-  // 初回レンダリング時にAjaxで、対象のアイテムのデータを取得する
   useEffect(() => {
-    axios.get(PATH + 'todo/' + editId).then(res => {
-      changeTodoItem(res.data)
-      changeTmpText(res.data.title) //ajaxで取得してから代入
-    })
-  },[])
+    dispatch(fetchTodoAction());
+    axios.get(PATH + "todo/" + params.id).then((res) => {
+      changeTmpText(res.data.title);
+      dispatch(successFetchTodoAction(res.data));
+    });
+  }, []);
 
   const handleEdit = () => {
-    const newTodoItem = {
-      ...todoItem,
-      title: tmpText
-    } //todoItem のtitleの名前を変更した連想配列を生成
-    axios.put(PATH + 'todo/' + params.id, newTodoItem).then(() => {
-      navigate('/')
-    }) //ajaxで対象のアイテムを更新
+    dispatch(editTodoAction());
+    axios
+      .put(PATH + "todo/" + params.id, {
+        ...todo,
+        title: tmpText,
+      })
+      .then((res) => {
+        dispatch(successEditTodoAction());
+        navigate("/");
+      });
+  };
+  if (!todo) {
+    return <p>loading...</p>;
   }
-
   return (
     <div className="form">
       <label htmlFor="text">編集:</label>
@@ -35,18 +49,14 @@ export default function EditPage() {
         type="text"
         id="text"
         value={tmpText}
-        onChange={e => { changeTmpText(e.currentTarget.value) }}
+        onChange={(e) => changeTmpText(e.currentTarget.value)}
       />
       <input
         type="button"
-        value="確定"
+        value="編集"
         onClick={handleEdit}
-      />
-      <input
-        type="button"
-        value="キャンセル"
-        onClick={() => navigate('/')}
+        disabled={isEditing}
       />
     </div>
-  )
+  );
 }

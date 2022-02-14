@@ -1,1 +1,1 @@
-export const PATH = 'http://mbc.to-r.net/react-todo/' 
+export const PATH = 'http://mbc.to-r.net/react-todo/'

@@ -1,51 +1,51 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from "react-router-dom"
-import axios from 'axios'
-import { PATH } from '../config'
-import { useSelector, useDispatch } from "react-redux"
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { PATH } from "../config";
+
 import {
   fetchTodoAction,
   successFetchTodoAction,
   deleteTodoAction,
-  successDeleteTodoAction
-} from "../actions"
+  successDeleteTodoAction,
+} from "../actions";
 
 export default function DeletePage() {
+  const todo = useSelector((state) => state.todo);
+  const isDeleting = useSelector((state) => state.isDeleting);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const navigate = useNavigate();
 
-  const isAdding = useSelector((state) => state.isAdding)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const params = useParams()
-  const deleteId = Number(params.id)
-  const [todoItem, changeTodoItem] = useState([])
-
-  // 初回レンダリング時にAjaxで、対象のアイテムのデータを取得する
-  useEffect(()=>{
-    axios.get(PATH + 'todo/' + deleteId).then(res => {
-      changeTodoItem(res.data);
-    })
-    },[])
+  useEffect(() => {
+    dispatch(fetchTodoAction());
+    axios.get(PATH + "todo/" + params.id).then((res) => {
+      dispatch(successFetchTodoAction(res.data));
+    });
+  }, []);
 
   const handleDelete = () => {
-    axios.delete(PATH + 'todo/' + deleteId).then(() => {
-      navigate('/')
-    })
+    dispatch(deleteTodoAction());
+    axios.delete(PATH + "todo/" + params.id).then(() => {
+      dispatch(successDeleteTodoAction());
+      navigate("/");
+    });
+  };
+
+  if (!todo) {
+    return <p>loading...</p>;
   }
 
   return (
     <div className="form">
-      <h2>"{todoItem.title}"を削除</h2>
+      <h2>{todo.title}を削除</h2>
       <input
         type="button"
         value="削除"
         onClick={handleDelete}
-      />
-      <input
-        type="button"
-        value="キャンセル"
-        onClick={() => { navigate('/') }}
+        disabled={isDeleting}
       />
     </div>
-  )
-
+  );
 }
