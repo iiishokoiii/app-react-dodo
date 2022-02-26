@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { PATH } from "../config";
+import { DB_URL } from "../config";
 
 import {
   fetchTodoListAction,
@@ -27,14 +27,16 @@ function useTodo() {
 
   const fetchTodoList = () => {
     dispatch(fetchTodoListAction());
-    axios.get(PATH + "todos").then((res) => {
+    const url = DB_URL + 'todo.json';
+    axios.get(url).then((res) => {
       dispatch(successFetchTodoListAction(res.data));
     });
   };
 
   const toggleTodo = (item) => {
+    const url = DB_URL + 'todo/' + item.id + '.json';
     axios
-    .put(PATH + "todo/" + item.id, {
+    .put(url, {
       ...item,
       checked: !item.checked,
     })
@@ -45,35 +47,40 @@ function useTodo() {
   };
 
   const addTodo = (tmpText) => {
+    const newId = Number(todoList.sort((a, b) => b.id - a.id)[0].id) + 1;
+    const newItem = { id: newId, title: tmpText, checked: false };
+    const url = DB_URL + 'todo/' + newId + '.json';
     dispatch(addTodoAction());
     return axios
-    .post(PATH + "todo", {
-      title: tmpText,
-      checked: false,
-    })
+    .put(url, newItem)
     .then(() => {
       dispatch(successAddTodoAction());
     });
   }
 
   const fetchTodo = (id) => {
+    const url = DB_URL + 'todo/' + id + '.json';
     dispatch(fetchTodoAction());
-    axios.get(PATH + "todo/" + id).then((res) => {
+    axios.get(url).then((res) => {
       dispatch(successFetchTodoAction(res.data));
     });
   }
 
   const deleteTodo = (id) => {
+    const url = DB_URL + 'todo/' + id + '.json';
     dispatch(deleteTodoAction());
-    return axios.delete(PATH + "todo/" + id).then(() => {
+    return axios
+      .put(url, {})
+    .then((res) => {
       dispatch(successDeleteTodoAction());
     });
   }
 
   const editTodo = (id, tmpText) => {
+    const url = DB_URL + 'todo/' + id + '.json';
     dispatch(editTodoAction());
     return axios
-    .put(PATH + "todo/" + id, {
+    .put(url, {
       ...todo,
       title: tmpText,
     })
