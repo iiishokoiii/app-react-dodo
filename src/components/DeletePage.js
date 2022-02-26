@@ -1,51 +1,34 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from "react-router-dom"
-import axios from 'axios'
-import { PATH } from '../config'
-import { useSelector, useDispatch } from "react-redux"
-import {
-  fetchTodoAction,
-  successFetchTodoAction,
-  deleteTodoAction,
-  successDeleteTodoAction
-} from "../actions"
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import useTodo from "../hooks/useTodo";
 
 export default function DeletePage() {
+  const { todo, isDeleting, fetchTodo, deleteTodo } = useTodo();
+  const params = useParams();
+  const navigate = useNavigate();
 
-  const isAdding = useSelector((state) => state.isAdding)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const params = useParams()
-  const deleteId = Number(params.id)
-  const [todoItem, changeTodoItem] = useState([])
+  useEffect(() => {
+    fetchTodo(params.id);
+  }, []);
 
-  // 初回レンダリング時にAjaxで、対象のアイテムのデータを取得する
-  useEffect(()=>{
-    axios.get(PATH + 'todo/' + deleteId).then(res => {
-      changeTodoItem(res.data);
-    })
-    },[])
+  const handleDelete = async () => {
+    await deleteTodo(params.id);
+    navigate("/");
+  };
 
-  const handleDelete = () => {
-    axios.delete(PATH + 'todo/' + deleteId).then(() => {
-      navigate('/')
-    })
+  if (!todo) {
+    return <p>loading...</p>;
   }
 
   return (
     <div className="form">
-      <h2>"{todoItem.title}"を削除</h2>
+      <h2>{todo.title}を削除</h2>
       <input
         type="button"
         value="削除"
         onClick={handleDelete}
-      />
-      <input
-        type="button"
-        value="キャンセル"
-        onClick={() => { navigate('/') }}
+        disabled={isDeleting}
       />
     </div>
-  )
-
+  );
 }
